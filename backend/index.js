@@ -19,6 +19,14 @@ app.post("/todo", (req,res)=>{
 app.get("/todos", ()=>{
 
 });
-app.put("/completes", ()=>{
-
+app.put("/completed", ()=>{
+    const payload=req.body;
+    const parsedPayload=completed.safeParse(payload);
+    if(!parsedPayload.success){
+        res.status(400).send({
+            message: "bad body ew"
+        })
+        return;
+    }
+    
 });
