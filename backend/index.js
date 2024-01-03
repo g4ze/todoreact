@@ -5,7 +5,26 @@ const {
 const {Todos}=require('./db')
 const express=require('express')
 const app=express();
+const cors=require('cors');
+app.use(cors())
 app.use(express.json());
+
+
+app.delete("/delete", async(req,res)=>{
+    const payload=req.body;
+    const parsedPayload=completed.safeParse(payload);
+    if(!parsedPayload.success){
+        res.status(400).send({
+            message: "bad body ew"
+        })
+        return;
+    }
+    await Todos.deleteOne({ _id: req.body.id }, { $set: { completed: true } });
+    res.json({
+        message:"DELETED"
+    })
+    
+})
 
 app.post("/todo", async (req,res)=>{
     const payload=req.body;
@@ -38,7 +57,7 @@ app.put("/completed", async (req, res)=>{
         })
         return;
     }
-    await todo.update({_id:req.body.id},{completed:true})
+    await Todos.updateOne({ _id: req.body.id }, { $set: { completed: true } });
     res.json({
         message:"marked done"
     })
